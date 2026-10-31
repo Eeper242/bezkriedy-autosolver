@@ -1,0 +1,24 @@
+
+{
+  "manifest_version": 3,
+  "name": "Bezkriedy slovicka autosolver",
+  "version": "0.1",
+
+  "description": "Automaticky vyrieši slovíčkového papagája",
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "bezkauto@eeper242.org",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.bezkriedy.sk/papagaj.php?*"],
+      "js": ["bezk.js"]
+    }
+  ]
+}
