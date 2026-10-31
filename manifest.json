@@ -17,7 +17,7 @@
 
   "content_scripts": [
     {
-      "matches": ["*://*.bezkriedy.sk/papagaj.php?*"],
+      "matches": ["*://*.bezkriedy.sk/papagaj.php*"],
       "js": ["bezk.js"]
     }
   ]
