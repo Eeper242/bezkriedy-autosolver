@@ -1,0 +1,10 @@
+{
+    "interval":{
+        "current": "normal",
+        "ultrasonic": 50,
+        "sonic": 100,
+        "quick": 250,
+        "normal": 500,
+        "slow": 1000
+    }
+}

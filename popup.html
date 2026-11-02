@@ -10,6 +10,15 @@
         <h3 id="title">Nastavenia</h3>
         
         <div class="option">
+            <label for="intervalSelect">Interval:</label>
+            <select id="intervalSelect">
+                <option value="ultrasonic">Ultrasonic (50ms)</option>
+                <option value="sonic">Sonic (100ms)</option>
+                <option value="quick">Quick (250ms)</option>
+                <option value="normal" selected>Normal (500ms)</option>
+                <option value="slow">Slow (1000ms)</option>
+            </select>
+        <div class="option">
             <button id="solveButton" class="solvebtn">Riešim?</button>
             <label for="solveButton">Spustiť riesenie</label>
         </div>

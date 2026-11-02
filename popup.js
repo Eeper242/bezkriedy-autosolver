@@ -1,36 +1,59 @@
-// popup.js
-const solveButton = document.getElementById('solveButton');
+async function initBezk() {
+    try {
+        let response = await fetch(chrome.runtime.getURL('settings.json'));
+        let settings = await response.json();
 
-solveButton.addEventListener('click', async () => {
-  // Toggle the CSS class (Red <-> Blue)
-  solveButton.classList.toggle('active');
-  solveButton.classList.toggle('nactive');
-  
-  // Check the current state and update button text / send message
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  
-  if (tab) {
-    chrome.tabs.sendMessage(tab.id, { action: "toggle_solve" }).catch(err => {
-      console.log("Could not reach content script. Are you on the right page?", err);
-    });
-  }
+        // popup.js
+        const solveButton = document.getElementById('solveButton');
+        const intervalSelect = document.getElementById('intervalSelect');
 
-  // Optional: Change button text dynamically depending on state
-  if (solveButton.classList.contains('active')) {
-    solveButton.textContent = "Zastaviť";   //Changes text back to "Solve"
-    solveButton.style.backgroundColor = "#ff4d4d"; //Changes background color to red
-  } else {
-    solveButton.textContent = "Riešiť";   // Changes text back to "Solve"
-    solveButton.style.backgroundColor = "#4CAF50"; // Changes background color to green
-  }
-});
+        solveButton.addEventListener('click', async () => {
+          const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+          
+          if (tab) {
+            // Send message and expect a response with the updated active state
+            chrome.tabs.sendMessage(tab.id, { action: "toggle_solve" }, (response) => {
+              if (chrome.runtime.lastError) {
+                console.log("Could not reach content script. Are you on the right page?");
+                return;
+              }
+              
+              // Update button appearance based on the actual returned state from bezk.js
+              updateButtonUI(response && response.isSolving);
+            });
+          }
+        });
 
-document.onfocus = function() {
-  if (solveButton.classList.contains('active')) {
-    solveButton.textContent = "Riešiť";   // Changes text back to "Solve"
-    solveButton.style.backgroundColor = "#4CAF50"; // Changes background color to green
-  } else {
-    solveButton.textContent = "Zastaviť";   //Changes text back to "Solve"
-    solveButton.style.backgroundColor = "#ff4d4d"; //Changes background color to red
-  }
+        function updateButtonUI(isSolving) {
+          if (isSolving) {
+            solveButton.textContent = "Zastaviť";
+            solveButton.style.backgroundColor = "#ff4d4d"; // Red
+            solveButton.classList.add('active');
+          } else {
+            solveButton.textContent = "Riešiť";
+            solveButton.style.backgroundColor = "#4CAF50"; // Green
+            solveButton.classList.remove('active');
+          }
+        }
+
+        intervalSelect.addEventListener('change', async () => {
+          const selectedInterval = intervalSelect.value;
+          
+          chrome.storage.local.set({ currentInterval: selectedInterval }, async () => {
+            const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+            if (tab) {
+              // Make sure 'interval' is explicitly passed here!
+              chrome.tabs.sendMessage(tab.id, { 
+                action: "interval_change", 
+                interval: selectedInterval 
+              }).catch(err => {
+                console.log("Could not reach content script.", err);
+              });
+            }
+          });
+        });
+      } catch (error) {
+        console.error("Error initializing bezkriedyAutosolver extension:", error);
+      }
 }
+initBezk();

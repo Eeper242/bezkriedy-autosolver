@@ -15,6 +15,10 @@
     }
   },
 
+  "permissions": [
+    "storage"
+  ],
+
   "content_scripts": [
     {
       "matches": ["*://*.bezkriedy.sk/papagaj.php*"],
@@ -23,6 +27,12 @@
     }
   ],
 
+  "web_accessible_resources": [
+    {
+      "resources": ["settings.json"],
+      "matches": ["https://www.bezkriedy.sk/*"]
+    }
+  ],
   "action": {
     "default_popup": "popup.html",
     "default_title": "Otvoriť nastavenia"
