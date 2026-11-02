@@ -1,14 +1,14 @@
 
 {
   "manifest_version": 3,
-  "name": "Bezkriedy slovicka autosolver",
-  "version": "0.1",
+  "name": "Automatický riešič slovíčkového papagája (v0.2)",
+  "version": "0.2",
 
-  "description": "Automaticky vyrieši slovíčkového papagája",
+  "description": "Automaticky ti vyrieši slovíčkového papagája na bezkriedy.sk, aby si nemusel/a tráviť čas kliknutím na správne odpovede. Tento doplnok nieje oficiálne schválený ani podporovaný bezkriedy.sk a používa sa na vlastnú zodpovednosť. Je to len projekt ktorý bol vytvorený v záujme zábavy a experimentovbania. Autor neručí za prípadné problémy, ktoré môžu vzniknúť pri používaní tohto doplnku. Tento projekt je taktiež open-source, a si ho môžeš pozrieť na GitHub-e: https://github.com/Eeper242/bezkriedy-autosolver",
 
   "browser_specific_settings": {
     "gecko": {
-      "id": "bezkauto@eeper242.org",
+      "id": "arsp@eeper242.org",
       "data_collection_permissions": {
         "required": ["none"]
       }

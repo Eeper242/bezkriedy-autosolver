@@ -9,7 +9,7 @@
     <body>
         <h3 id="title">Nastavenia</h3>
         
-        <div class="option">
+        <div class="options">
             <label for="intervalSelect">Interval:</label>
             <select id="intervalSelect">
                 <option value="instant">Instantný (!!EXPERIMENTÁLNE!!, 1ms/vyriešenie)</option>
@@ -20,9 +20,10 @@
                 <option value="normal">Normálny (1000ms/vyriešenie)</option>
                 <option value="slow">Pomalý (2000ms/vyriešenie)</option>
             </select>
+        </div>
         <div class="solving">
             <button id="solveButton" class="solvebtn">Riešiť</button>
-            <label for="solveButton">Spustiť riešenie</label>
+            <label id="badPage">Niesi na bezkriedy.sk</label>
         </div>
 
         <script src="popup.js"></script>
