@@ -55,6 +55,8 @@ async function initBezk() {
         chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             if (request.action === "toggle_solve") {
                 toggleSolve();
+                // Send the current active state back to the popup!
+                sendResponse({ isSolving: solve });
             }
             if (request.action === "interval_change" && request.interval) {
                 currentIntervalKey = request.interval;
@@ -65,7 +67,9 @@ async function initBezk() {
                     let ms = getIntervalMs(currentIntervalKey);
                     intervalId = setInterval(solveBezkriedy, ms);
                 }
+                sendResponse({ status: "updated" });
             }
+            return true; // Keep message channel open for async response if needed
         });
 
         console.log("bezkriedyAutosolver extension initialized successfully.");

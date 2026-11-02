@@ -1,10 +1,12 @@
 {
     "interval":{
-        "current": "normal",
+        "current": "quick",
+        "instant": 1,
         "ultrasonic": 50,
         "sonic": 100,
-        "quick": 250,
-        "normal": 500,
-        "slow": 1000
+        "vquick": 250,
+        "quick": 500,
+        "normal": 1000,
+        "slow": 2000
     }
 }

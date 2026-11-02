@@ -8,7 +8,7 @@ body {
 #title {
     text-align: center;
     color: white;
-    font-size: 30px;
+    font-size: 25px;
 }
 
 label{ 
@@ -20,11 +20,29 @@ label{
 .solvebtn{
     border: none;
     border-radius: 4px;
-    background-color: #939493;
+    background-color: #4CAF50;
     color: white;
     padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 15px;
+}
+
+.solving {
+    margin-top: 10px;
+}
+
+.option{
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+#intervalSelect {
+    width: 100px;
+    padding: 5px;
+    border-radius: 4px;
+    background-color: #d4d4d4;
+    border: none;
 }

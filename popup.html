@@ -12,15 +12,17 @@
         <div class="option">
             <label for="intervalSelect">Interval:</label>
             <select id="intervalSelect">
-                <option value="ultrasonic">Ultrasonic (50ms)</option>
-                <option value="sonic">Sonic (100ms)</option>
-                <option value="quick">Quick (250ms)</option>
-                <option value="normal" selected>Normal (500ms)</option>
-                <option value="slow">Slow (1000ms)</option>
+                <option value="instant">Instantný (!!EXPERIMENTÁLNE!!, 1ms/vyriešenie)</option>
+                <option value="ultrasonic">Ultrasonický (50ms/vyriešenie)</option>
+                <option value="sonic">Sonický (100ms/vyriešenie)</option>
+                <option value="vquick">Svižný (250ms/vyriešenie)</option>
+                <option value="quick" selected>Rýchly (500ms/vyriešenie)</option>
+                <option value="normal">Normálny (1000ms/vyriešenie)</option>
+                <option value="slow">Pomalý (2000ms/vyriešenie)</option>
             </select>
-        <div class="option">
-            <button id="solveButton" class="solvebtn">Riešim?</button>
-            <label for="solveButton">Spustiť riesenie</label>
+        <div class="solving">
+            <button id="solveButton" class="solvebtn">Riešiť</button>
+            <label for="solveButton">Spustiť riešenie</label>
         </div>
 
         <script src="popup.js"></script>
