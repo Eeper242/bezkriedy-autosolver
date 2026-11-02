@@ -6,6 +6,11 @@ var interval = 250; // Interval in milliseconds (0.5 seconds by default)
 let solve = false;
 let intervalId = null;
 
+wait = function(ms) { return Promise.resolve(); }; // Override the wait function in papagaj.js to prevent delays in the solving process
+// Same for these functions, which are used to play sounds when the answer is correct or incorrect
+playYes = function() { return Promise.resolve(); };
+playNo = function() { return Promise.resolve(); };
+
 // The heart of this extension
 function solveBezkriedy() {
     //If answer button exists/is found, click it. If not, wait for the next interval.

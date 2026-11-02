@@ -18,7 +18,8 @@
   "content_scripts": [
     {
       "matches": ["*://*.bezkriedy.sk/papagaj.php*"],
-      "js": ["bezk.js"]
+      "js": ["bezk.js"],
+      "run_at": "document_idle"
     }
   ],
 
