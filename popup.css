@@ -13,6 +13,22 @@ body {
     font-size: 25px;
 }
 
+.solving {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.options {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
 label{ 
     color: rgb(223, 223, 223);
     font-size: 15px;
@@ -29,22 +45,6 @@ label{
     text-decoration: none;
     display: inline-block;
     font-size: 15px;
-}
-
-.solving {
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-    justify-content: center;
-    align-items: center;
-}
-
-.options {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
 }
 
 #intervalSelect {

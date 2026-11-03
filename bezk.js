@@ -14,64 +14,49 @@ script.remove(); // Clean up the tag immediately after execution
 
 async function initBezk() {
     try {
-        let response = await fetch(chrome.runtime.getURL('settings.json'));
-        let settings = await response.json();
+        // Tell chrome to fetch settings.json and assign it to let settings
+        let jsonFile = await fetch(chrome.runtime.getURL('settings.json'));
+        let settings = await jsonFile.json();
         let solve = false;
-        let intervalId = null;
-
-        // Helper function to resolve interval key to actual milliseconds
-        function getIntervalMs(key) { return settings.interval[key] || settings.interval.normal; }
-
-        // Load initial interval from storage or default to 'normal'
-        let currentIntervalKey = await new Promise(resolve => {
+        let intervalInUse = null;
+        // Assign currentInterval to saved value in chrome.storage.local || settings.interval.current
+        let currentInterval = await new Promise(resolve => {
             chrome.storage.local.get(['currentInterval'], data => { resolve(data.currentInterval || settings.interval.current); });
         });
 
-        // The heart of the solver (click the answer button if it exists)
+        function getCurrentInterval(key) { return settings.interval[key] || settings.interval.normal; }
+
+        // (Engine) Find answer button with id ans-*_4. If exist, click it, else skip
         function solveBezkriedy() {
-            let ansbtn = document.querySelector('[id*="ans-"][id*="_4"]'); // 1. FInd the naswert button that starts with ans- and ends with _4
-            if (ansbtn) { // 2. If found, click it
-                ansbtn.click();
-                console.log("(arsp) Answer button was found and clicked successfully.");
-            } else { console.log("Answer button not found, skipping"); } // 3. If not found, log and wait for the next interval
+            let ansbtn = document.querySelector('[id*="ans-"][id*="_4"]');
+            if (ansbtn) { ansbtn.click(); }
+            else { console.log("(arsp) Answer button not found, skipping"); }
         }
 
-        // Switch between solving and not solving, while ensuring function executes at certain interval which is selected by user in popup (default is 500ms, found in settings.json)
+        // (Switch) Turns on/off solver, based on if switch message was recieved (from popup.js)
         function toggleSolve() {
             solve = !solve;
-            console.log("(arsp) Toggled solve state to: " + solve);
-            if (solve) {
-                let ms = getIntervalMs(currentIntervalKey);
-                intervalId = setInterval(solveBezkriedy, ms);
-            } else {
-                clearInterval(intervalId);
-                console.log("Solving stopped.");
-            }
+            console.log("(arsp) Solving: " + solve);
+            if (solve) { intervalInUse = setInterval(solveBezkriedy, getCurrentInterval(currentInterval)); }
+            else { clearInterval(intervalInUse); console.log("(arsp) Solving stopped."); }
         }
 
-        // listening for messages from popup.js, based on message executes the appropriate function
+        // Message listener, messages from popup.js
         chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-            // Request to switch solving state
+            // Switch solving engine, respond back with current state
             if (request.action === "toggle_solve") {
                 toggleSolve();
-                sendResponse({ isSolving: solve }); // Response back to popup.js with the current state of solving
+                sendResponse({ isSolving: solve });
             }
-            // Request to change the interval from popup.js
+            // Change interval in use, respond back with status updated
             if (request.action === "interval_change" && request.interval) {
-                currentIntervalKey = request.interval; // Update the current interval key
-                console.log("(arsp) Changed current interval to: " + currentIntervalKey);
-
-                // Changes speed mid solving
-                if (solve) {
-                    clearInterval(intervalId);
-                    let ms = getIntervalMs(currentIntervalKey);
-                    intervalId = setInterval(solveBezkriedy, ms);
-                }
-                sendResponse({ status: "updated" }); // Response back to popup.js with the current state of solving
+                currentInterval = request.interval;
+                console.log("(arsp) New interval: " + currentInterval);
+                if (solve) { clearInterval(intervalInUse); intervalInUse = setInterval(solveBezkriedy, getCurrentInterval(currentInterval)); } // Changes speed mid solving
+                sendResponse({ status: "updated" });
             }
             return true; // Keep message channel open for async response if needed
         });
-
         console.log("Eeper242's bezkriedyAutosolver extension (bezk.js) initialized successfully.");
 
     } catch (error) { console.error("(arsp) Failed to load settings.json:", error); }

@@ -8,5 +8,16 @@
         "quick": 500,
         "normal": 1000,
         "slow": 2000
+    },
+
+    "buttonUI": {
+        "solving":{
+            "text": "Zastaviť",
+            "color": "#ff4d4d"
+        },
+        "notSolving": {
+            "text": "Riešiť",
+            "color": "#4CAF50"
+        }
     }
 }

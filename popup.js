@@ -1,20 +1,30 @@
 // popup.js
 // Popup handling script
-
 console.log("(arsp) Initializing popup.js...");
+
 async function initBezk() {
   try {
-    let response = await fetch(chrome.runtime.getURL('settings.json'));
-    let settings = await response.json();
+    let jsonFile = await fetch(chrome.runtime.getURL('settings.json'));
+    let settings = await jsonFile.json();
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    // Get html elements
     const solveButton = document.getElementById('solveButton');
     const intervalSelect = document.getElementById('intervalSelect');
     const badPageLabel = document.getElementById('badPage');
 
-    // If im not on bezkredy.sk, show label
-    if (tab && !tab.url.includes("bezkriedy.sk")) { solveButton.disabled = false; }
-    else { solveButton.disabled = true; }
+    // Update button UI based on solving state (yes=stop / no=start)
+    function updateButtonUI(isSolving) {
+      if (isSolving) {
+        solveButton.textContent = settings.buttonUI.solving.text;
+        solveButton.style.backgroundColor = settings.buttonUI.solving.color;
+      } else {
+        solveButton.textContent = settings.buttonUI.notSolving.text;
+        solveButton.style.backgroundColor = settings.buttonUI.notSolving.color;
+      }
+    }
+
+    // Disable controls if not on bezkriedy.sk/papagaj.php*
+    if (tab && tab.url.includes("bezkriedy.sk/papagaj.php*")) { solveButton.disabled = false; badPageLabel.disabled = true; }
+    else { solveButton.disabled = true; badPageLabel.disabled = false; }
 
     // Load saved interval (chrome.storage.local)
     chrome.storage.local.get(['currentInterval'], (data) => {
@@ -22,44 +32,29 @@ async function initBezk() {
         intervalSelect.value = savedInterval;
     });
 
-    // Get solving state (from bezk.js)
+    // Check for Switch response and update UI (from bezk.js)
     if (tab) {
         chrome.tabs.sendMessage(tab.id, { action: "get_status" }, (response) => {
             if (!chrome.runtime.lastError && response) { updateButtonUI(response.isSolving); }
         });
     }
 
-    // Add event listener to the #solveButton, sends message to toggle solving state
+    // #solveButton listener, sends message to Switch
     solveButton.addEventListener('click', async () => {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       if (tab){
         chrome.tabs.sendMessage(tab.id, { action: "toggle_solve" }, (response) => {
-          if (chrome.runtime.lastError) { console.log("(arsp) Could not reach content script."); return; }
-          updateButtonUI(response && response.isSolving);
+          if (!chrome.runtime.lastError) { updateButtonUI(response && response.isSolving); }
+          else { console.log("(arsp) Could not reach content script."); }
         });
       }
     });
 
-    // Updates button UI based on the solving state (isSolving)
-    function updateButtonUI(isSolving) {
-      // If yes show stop, else show run
-      if (isSolving) {
-        solveButton.textContent = "Zastaviť";
-        solveButton.style.backgroundColor = "#ff4d4d"; // Red
-        solveButton.classList.add('active');
-      } else {
-        solveButton.textContent = "Riešiť";
-        solveButton.style.backgroundColor = "#4CAF50"; // Green
-        solveButton.classList.remove('active');
-      }
-    }
-
-    // Add event listener to the #intervalSelect, sends message to change interval
+    // #intervalSelect listener, sends message for currentInterval update
     intervalSelect.addEventListener('change', async () => {
       const selectedInterval = intervalSelect.value;
       chrome.storage.local.set({ currentInterval: selectedInterval }, async () => {
-        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-        if (tab) { chrome.tabs.sendMessage(tab.id, { action: "interval_change", interval: selectedInterval }).catch(err => { console.log("Could not reach content script.", err); }); }
+        if (tab) { chrome.tabs.sendMessage(tab.id, { action: "interval_change", interval: selectedInterval }) }
+        else { console.log("(arsp) Could not reach content script."); }
       });
     });
 
