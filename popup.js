@@ -14,17 +14,19 @@ async function initBezk() {
     // Update button UI based on solving state (yes=stop / no=start)
     function updateButtonUI(isSolving) {
       if (isSolving) {
+        solveButton.style.transition = "270ms";
         solveButton.textContent = settings.buttonUI.solving.text;
         solveButton.style.backgroundColor = settings.buttonUI.solving.color;
       } else {
+        solveButton.style.transition = "270ms";
         solveButton.textContent = settings.buttonUI.notSolving.text;
         solveButton.style.backgroundColor = settings.buttonUI.notSolving.color;
       }
     }
 
     // Disable controls if not on bezkriedy.sk/papagaj.php*
-    if (tab && tab.url.includes("bezkriedy.sk/papagaj.php*")) { solveButton.disabled = false; badPageLabel.disabled = true; }
-    else { solveButton.disabled = true; badPageLabel.disabled = false; }
+    if (tab && tab.url.includes("bezkriedy.sk")) { solveButton.disabled = false; badPageLabel.style.visibility = 'hidden' }
+    else { solveButton.disabled = true; badPageLabel.style.visibility = 'shown' }
 
     // Load saved interval (chrome.storage.local)
     chrome.storage.local.get(['currentInterval'], (data) => {

@@ -2,12 +2,13 @@
 // Main content script
 console.log("Initializing Eeper242's bezkriedyAutosolver extension (bezk.js)...");
 
-// Inject a script into the page to override the wait, playYes, and playNo functions, to make anser quicker to load and avoid unnecessary delays
+// Inject a script into the page to override its functions, makes ansers quicker to load and avoids unnecessary delays
 let script = document.createElement('script');
 script.textContent = `
     window.wait = function(ms) { return Promise.resolve(); };
     window.playYes = function() { return Promise.resolve(); };
     window.playNo = function() { return Promise.resolve(); };
+    window.playAudio = function() { return Promise.resolve() };
 `;
 (document.head || document.documentElement).appendChild(script);
 script.remove(); // Clean up the tag immediately after execution
