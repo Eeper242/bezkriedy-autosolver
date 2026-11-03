@@ -1,2 +1,2 @@
-Toto je open-source autosolver pre bezkriedy-papagaj.
-Toto rozsirenie je urcene pre prehliadacew firefox, neskor mozno aj pre prehliadace chrome/edge
+This is an open-source autosolver for bezkriedy.sk papagaj
+This extension is mainly focused on firefox-based browsers at this time. THere are plans of putting it on chrome/edge web store if it gaines enough success.
