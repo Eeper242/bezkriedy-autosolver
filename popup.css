@@ -92,21 +92,24 @@ body {
 
 #authorD {
     align-items: right;
-    vertical-align: middle;
+    vertical-align: center;
     justify-content: right;
     text-align: right;
 }
 
 #authorL {
     align-self: right;
-    font-size: 10px;
-    font-weight: 400;
+    font-size: 11.5px;
+    font-weight: 550;
+    padding-right: 2px;
     color: rgb(228, 228, 228);
 }
 
 .linkBio {
-    height: 15px;
-    padding-left: 3px;
+    height: 14px;
+    padding-left: 1px;
+    padding-right: 1.5px;
+    filter: brightness(0) invert(1);
 }
 
 a {
@@ -114,4 +117,6 @@ a {
     vertical-align: middle;
     justify-content: center;
     align-content: center;
+    text-decoration: none;
+    outline: none;
 }
